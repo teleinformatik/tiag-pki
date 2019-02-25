@@ -1,6 +1,8 @@
+certutil -enterprise -f -v -AddStore "Root" "C:\CRT"
+
 Install-WindowsFeature ADCS-Cert-Authority -IncludeManagementTools
 --------------------------------------------------------------------------------------
-Install-AdcsCertificationAuthority -catype StandaloneRootCA -CACommonName "Teleinformatik Root Certification Authority" -CADistinguishedNameSuffix "OU=TIAG Root Certification Authority,O=TIAG,C=CH" -KeyLength 8192 -HashAlgorithmName sha512 -CryptoProviderName "RSA#Microsoft Software Key Storage Provider" -DatabaseDirectory "C:\CertDB" -LogDirectory "C:\CertLog" -ValidityPeriod "Years" -ValidityPeriodUnits 20
+Install-AdcsCertificationAuthority -catype StandaloneRootCA -CACommonName "Teleinformatik Customers Policy CA" -CADistinguishedNameSuffix "OU=Teleinformatik Customers Policy CA,O=TIAG,C=CH" -KeyLength 8192 -HashAlgorithmName sha512 -CryptoProviderName "RSA#Microsoft Software Key Storage Provider" -DatabaseDirectory "C:\CertDB" -LogDirectory "C:\CertLog" -ValidityPeriod "Years" -ValidityPeriodUnits 20
 --------------------------------------------------------------------------------------
 $crllist = Get-CACrlDistributionPoint; foreach ($crl in $crllist)
 {Remove-CACrlDistributionPoint $crl.uri -Force };
@@ -10,7 +12,7 @@ $aialist = Get-CAAuthorityInformationAccess; foreach ($aia in $aialist) {Remove-
 mkdir C:\CRL
 Add-CACrlDistributionPoint -Uri http://crl.teleinformatik.ch/pki/<CAName>_<CRLNameSuffix>.crl -AddtoCertificateCDP -AddToFreshestCRL -Force -Verbose
 Add-CACrlDistributionPoint -Uri file://c:\CRL\<CAName>.crl -PublishToServer -Force -Verbose
-Add-CAAuthorityInformationAccess -Uri http://crt.tbztest.ch/pki/<ServerDNSName>_<CaName>_<CertificateName>.crt -AddToCertificateAia -Force -Verbose
+Add-CAAuthorityInformationAccess -Uri http://crt.teleinformatik.ch/pki/<ServerDNSName>_<CaName>_<CertificateName>.crt -AddToCertificateAia -Force -Verbose
 --------------------------------------------------------------------------------------
 certutil -setreg CA\CRLPeriodUnits 26
 certutil -setreg CA\CRLPeriod "Weeks"
