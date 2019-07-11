@@ -1,6 +1,12 @@
+Rename-Computer SE0xv
+
+Add-Computer -DomainName test.local
+
+certutil -enterprise -f -v -AddStore "Root" "C:\CRT"
+
 Install-WindowsFeature ADCS-Cert-Authority -IncludeManagementTools
 --------------------------------------------------------------------------------------
-Install-AdcsCertificationAuthority -catype StandaloneRootCA -CACommonName "Teleinformatik Root CA" -CADistinguishedNameSuffix "OU=TIAG Root CA,O=TIAG,C=CH" -KeyLength 8192 -HashAlgorithmName sha512 -CryptoProviderName "RSA#Microsoft Software Key Storage Provider" -DatabaseDirectory "C:\CertDB" -LogDirectory "C:\CertLog" -ValidityPeriod "Years" -ValidityPeriodUnits 30
+Install-AdcsCertificationAuthority -catype StandaloneRootCA -CACommonName "Teleinformatik Customers Policy CA" -CADistinguishedNameSuffix "OU=Teleinformatik Customers Policy CA,O=TIAG,C=CH" -KeyLength 4096 -HashAlgorithmName sha256 -CryptoProviderName "RSA#Microsoft Software Key Storage Provider" -DatabaseDirectory "C:\CertDB" -LogDirectory "C:\CertLog" -ValidityPeriod "Years" -ValidityPeriodUnits 20
 --------------------------------------------------------------------------------------
 $crllist = Get-CACrlDistributionPoint; foreach ($crl in $crllist)
 {Remove-CACrlDistributionPoint $crl.uri -Force };
